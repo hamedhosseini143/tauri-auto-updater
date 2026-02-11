@@ -10,6 +10,7 @@
 ### راه‌اندازی اولیه پروژه
 
 #### Added
+
 - 🎉 راه‌اندازی کامل Tauri Auto-Updater
 - ✅ نصب و پیکربندی `tauri-plugin-updater`
 - ✅ نصب `@tauri-apps/plugin-updater` برای frontend
@@ -53,11 +54,13 @@
 - ✅ آپدیت `.gitignore` برای عدم commit شدن کلیدهای امضا
 
 #### Security
+
 - 🔒 پیاده‌سازی امضای دیجیتال برای artifacts
 - 🔒 ذخیره امن کلید خصوصی در GitHub Secrets
 - 🔒 اضافه کردن `*.key` و `.tauri/` به `.gitignore`
 
 #### Documentation
+
 - 📚 راهنمای گام به گام برای راه‌اندازی
 - 📚 مثال‌های کامل استفاده
 - 📚 Troubleshooting guide
@@ -93,15 +96,19 @@
 ## [1.0.0] - 2026-02-XX
 
 ### Added
+
 - ویژگی جدید اضافه شد
 
 ### Changed
+
 - تغییر در ویژگی موجود
 
 ### Fixed
+
 - رفع باگ خاص
 
 ### Security
+
 - بهبود امنیتی
 
 [1.0.0]: https://github.com/hamedhosseini143/tauri-auto-updater/compare/v0.1.0...v1.0.0

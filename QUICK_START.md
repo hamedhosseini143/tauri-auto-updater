@@ -44,10 +44,12 @@ cat ~/.tauri/auto_updater.key
 3. **New repository secret** را کلیک کنید
 
 **Secret اول:**
+
 - Name: `TAURI_SIGNING_PRIVATE_KEY`
 - Value: محتوای کلید خصوصی (از دستور بالا)
 
 **Secret دوم:**
+
 - Name: `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`
 - Value: رمز عبور کلید (اگر هنگام ساخت رمز ندادید، خالی بگذارید)
 
@@ -67,6 +69,7 @@ cat ~/.tauri/auto_updater.key
 ```
 
 خروجی:
+
 ```
 ============================================
 🚀 Tauri Auto-Updater Production Release
@@ -123,6 +126,7 @@ npm run tauri build
 ```
 
 فایل build شده را پیدا کنید:
+
 - **macOS**: `src-tauri/target/release/bundle/macos/auto_updater.app`
 - **Windows**: `src-tauri/target/release/bundle/nsis/auto_updater_0.1.0_x64-setup.exe`
 - **Linux**: `src-tauri/target/release/bundle/appimage/auto_updater_0.1.0_amd64.AppImage`
@@ -155,6 +159,7 @@ npm run tauri build
 ## 🎉 تمام شد!
 
 حالا شما:
+
 - ✅ Auto-updater کاملاً راه‌اندازی شده دارید
 - ✅ یک workflow خودکار برای release
 - ✅ امضای دیجیتال برای امنیت
@@ -185,6 +190,7 @@ npm run tauri build
 ### ۱. چگونه version را تغییر دهم؟
 
 از اسکریپت استفاده کنید:
+
 ```bash
 ./scripts/release-prod.sh
 ```
@@ -192,11 +198,13 @@ npm run tauri build
 ### ۲. چگونه release را لغو کنم؟
 
 اگر tag را هنوز push نکردید:
+
 ```bash
 git tag -d v0.1.0
 ```
 
 اگر push کردید:
+
 ```bash
 git tag -d v0.1.0
 git push origin :refs/tags/v0.1.0
@@ -209,6 +217,7 @@ git push origin :refs/tags/v0.1.0
 ### ۴. Updater کار نمی‌کند!
 
 بررسی کنید:
+
 - [ ] Release منتشر شده (نه draft)
 - [ ] Version در config بیشتر از version فعلی است
 - [ ] Public key در config درست است
@@ -218,6 +227,7 @@ git push origin :refs/tags/v0.1.0
 ### ۵. GitHub Actions شکست خورد!
 
 بررسی کنید:
+
 - [ ] Secrets درست اضافه شده‌اند
 - [ ] Workflow permissions فعال است
 - [ ] لاگ‌های workflow را بخوانید
@@ -225,6 +235,7 @@ git push origin :refs/tags/v0.1.0
 ## 🆘 کمک بیشتر
 
 اگر مشکلی دارید:
+
 1. [Troubleshooting در UPDATER_SETUP.md](UPDATER_SETUP.md#troubleshooting) را بخوانید
 2. یک [Issue در GitHub](https://github.com/hamedhosseini143/tauri-auto-updater/issues) باز کنید
 
