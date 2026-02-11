@@ -164,7 +164,6 @@ IFS='.' read -r -a parts <<< "$version"
 
   echo "${major}.${minor}.${patch}"
   }
-
   select_increment_type() {
   print_header "Select Version Increment Type"
 
@@ -196,7 +195,6 @@ IFS='.' read -r -a parts <<< "$version"
   esac
   done
   }
-
   update_tauri_config() {
   local new_version=$1
 
@@ -213,7 +211,6 @@ IFS='.' read -r -a parts <<< "$version"
 
   print_success "Version in $TAURI_CONFIG_PATH updated to $new_version"
   }
-
   # ==============================================================================
   # Confirmation
   # ==============================================================================
@@ -249,7 +246,6 @@ IFS='.' read -r -a parts <<< "$version"
   exit 0
   fi
   }
-
   # ==============================================================================
   # Git Operations
   # ==============================================================================
@@ -264,7 +260,6 @@ IFS='.' read -r -a parts <<< "$version"
   print_error "Error pulling changes"
   fi
   }
-
   commit_and_push_changes() {
   local new_version=$1
 
@@ -283,7 +278,6 @@ IFS='.' read -r -a parts <<< "$version"
 
   print_success "Changes committed and pushed"
   }
-
   create_and_push_tag() {
   local new_version=$1
   local tag_name="v$new_version"
@@ -300,7 +294,6 @@ IFS='.' read -r -a parts <<< "$version"
 
   print_success "Tag $tag_name created and pushed"
   }
-
   # ==============================================================================
   # Main
   # ==============================================================================
@@ -360,6 +353,5 @@ IFS='.' read -r -a parts <<< "$version"
   print_info "Wait for GitHub Actions workflow to complete (~5-10 minutes)"
   echo ""
   }
-
   # Run main function
   main
