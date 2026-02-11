@@ -53,7 +53,7 @@ IFS='.' read -r major minor patch <<< "$current_version"
 
   echo "About to create PRODUCTION release v$new_version"
   read -rp "Proceed? [y/N]: " confirm
-  if [[ "${confirm,,}" != "y" ]]; then
+  if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
   echo "Aborted."
   exit 1
   fi
