@@ -38,7 +38,7 @@
       "endpoints": [
         "https://github.com/hamedhosseini143/tauri-auto-updater/releases/latest/download/latest.json"
       ],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFDQUREMTE1MzA3Q0VCMjUKUldRbDYzd3dGZEd0ckRWVzRqdlpiOW1kSk0zVCtpRmtSa2pqU3hkSmV0aFFkdnBNLzBuVWxuNTMK%"
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFDQUREMTE1MzA3Q0VCMjUKUldRbDYzd3dGZEd0ckRWVzRqdlpiOW1kSk0zVCtpRmtSa2pqU3hkSmV0aFFkdnBNLzBuVWxuNTMK"
     }
   }
 }
