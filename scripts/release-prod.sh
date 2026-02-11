@@ -192,6 +192,7 @@ IFS='.' read -r -a parts <<< "$version"
   ;;
   *)
   print_error "Invalid choice. Please enter 1, 2, or 3"
+  ;;
   esac
   done
   }
