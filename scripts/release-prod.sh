@@ -3,8 +3,8 @@
 # ==============================================================================
 # Tauri Auto-Updater Production Release Script
 # ==============================================================================
-# این اسکریپت برای ساخت و انتشار نسخه production استفاده می‌شود
-# استفاده: ./scripts/release-prod.sh
+# This script is used to build and publish production releases
+# Usage: ./scripts/release-prod.sh
 # ==============================================================================
 
 set -e # Exit on error
@@ -53,36 +53,36 @@ echo -e "${BLUE}ℹ️ $1${NC}"
 # ==============================================================================
 
 check_prerequisites() {
-print_header "بررسی پیش‌نیازها"
+print_header "Checking Prerequisites"
 
 # Check if jq is installed
 if ! command -v jq &> /dev/null; then
-print_error "jq نصب نیست"
-print_info "لطفاً با دستور زیر نصب کنید: brew install jq"
+print_error "jq is not installed"
+print_info "Please install with: brew install jq"
 exit 1
 fi
-print_success "jq نصب شده است"
+print_success "jq is installed"
 
 # Check if git is installed
 if ! command -v git &> /dev/null; then
-print_error "git نصب نیست"
+print_error "git is not installed"
 exit 1
 fi
-print_success "git نصب شده است"
+print_success "git is installed"
 
 # Check if we're in a git repository
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
-print_error "این دایرکتوری یک git repository نیست"
+print_error "This directory is not a git repository"
 exit 1
 fi
-print_success "در git repository هستیم"
+print_success "In a git repository"
 
 # Check if tauri config exists
 if [ ! -f "$TAURI_CONFIG_PATH" ]; then
-print_error "فایل $TAURI_CONFIG_PATH پیدا نشد"
+print_error "File $TAURI_CONFIG_PATH not found"
 exit 1
 fi
-print_success "فایل Tauri config پیدا شد"
+print_success "Tauri config file found"
 }
 
 # ==============================================================================
@@ -90,25 +90,25 @@ print_success "فایل Tauri config پیدا شد"
 # ==============================================================================
 
 check_git_status() {
-print_header "بررسی وضعیت Git"
+print_header "Checking Git Status"
 
 # Check current branch
 CURRENT_BRANCH=$(git branch --show-current)
 if [ "$CURRENT_BRANCH" != "$MAIN_BRANCH" ]; then
-print_error "شما روی branch '$CURRENT_BRANCH' هستید"
-print_info "لطفاً به branch '$MAIN_BRANCH' بروید: git checkout $MAIN_BRANCH"
+print_error "You are on branch '$CURRENT_BRANCH'"
+print_info "Please switch to branch '$MAIN_BRANCH': git checkout $MAIN_BRANCH"
 exit 1
 fi
-print_success "روی branch '$MAIN_BRANCH' هستید"
+print_success "On branch '$MAIN_BRANCH'"
 
 # Check if working directory is clean
 if ! git diff-index --quiet HEAD --; then
-print_error "Working directory clean نیست"
-print_info "لطفاً تغییرات را commit یا stash کنید"
+print_error "Working directory is not clean"
+print_info "Please commit or stash your changes"
 git status --short
 exit 1
 fi
-print_success "Working directory clean است"
+print_success "Working directory is clean"
 }
 
 # ==============================================================================
@@ -157,7 +157,7 @@ IFS='.' read -r -a parts <<< "$version"
   patch=0
   ;;
   *)
-  print_error "نوع increment نامعتبر است: $increment_type"
+  print_error "Invalid increment type: $increment_type"
   exit 1
   ;;
   esac
@@ -166,17 +166,17 @@ IFS='.' read -r -a parts <<< "$version"
   }
 
   select_increment_type() {
-  print_header "انتخاب نوع Version Increment"
+  print_header "Select Version Increment Type"
 
-  echo -e "${BLUE}نوع تغییرات این release را انتخاب کنید:${NC}"
+  echo -e "${BLUE}Select the type of changes in this release:${NC}"
   echo ""
-  echo "1) Patch (x.x.1) - رفع باگ‌ها و تغییرات جزئی"
-  echo "2) Minor (x.1.0) - ویژگی‌های جدید (backward compatible)"
-  echo "3) Major (1.0.0) - تغییرات بزرگ (breaking changes)"
+  echo "1) Patch (x.x.1) - Bug fixes and minor changes"
+  echo "2) Minor (x.1.0) - New features (backward compatible)"
+  echo "3) Major (1.0.0) - Major changes (breaking changes)"
   echo ""
 
   while true; do
-  read -p "انتخاب شما [1-3]: " choice
+  read -p "Your choice [1-3]: " choice
   case $choice in
   1)
   echo "patch"
@@ -191,8 +191,7 @@ IFS='.' read -r -a parts <<< "$version"
   return
   ;;
   *)
-  print_error "انتخاب نامعتبر. لطفاً 1، 2 یا 3 را وارد کنید"
-  ;;
+  print_error "Invalid choice. Please enter 1, 2, or 3"
   esac
   done
   }
@@ -200,7 +199,7 @@ IFS='.' read -r -a parts <<< "$version"
   update_tauri_config() {
   local new_version=$1
 
-  print_info "در حال آپدیت $TAURI_CONFIG_PATH ..."
+  print_info "Updating $TAURI_CONFIG_PATH ..."
 
   # Create a temporary file
   local temp_file=$(mktemp)
@@ -211,7 +210,7 @@ IFS='.' read -r -a parts <<< "$version"
   # Replace original file
   mv "$temp_file" "$TAURI_CONFIG_PATH"
 
-  print_success "Version در $TAURI_CONFIG_PATH به $new_version آپدیت شد"
+  print_success "Version in $TAURI_CONFIG_PATH updated to $new_version"
   }
 
   # ==============================================================================
@@ -223,29 +222,29 @@ IFS='.' read -r -a parts <<< "$version"
   local new_version=$2
   local increment_type=$3
 
-  print_header "تأیید Production Release"
+  print_header "Confirm Production Release"
 
-  echo -e "${YELLOW}⚠️ شما در حال ساخت یک PRODUCTION RELEASE هستید!${NC}"
+  echo -e "${YELLOW}⚠️ You are about to create a PRODUCTION RELEASE!${NC}"
   echo ""
-  echo -e "${BLUE}اطلاعات Release:${NC}"
+  echo -e "${BLUE}Release Information:${NC}"
   echo " • Branch: $MAIN_BRANCH"
-  echo " • نسخه فعلی: $old_version"
-  echo " • نسخه جدید: v$new_version"
-  echo " • نوع: $increment_type"
+  echo " • Current Version: $old_version"
+  echo " • New Version: v$new_version"
+  echo " • Type: $increment_type"
   echo " • Tag: v$new_version"
   echo ""
-  echo -e "${YELLOW}این عملیات:${NC}"
-  echo " 1. Version در $TAURI_CONFIG_PATH را به $new_version تغییر می‌دهد"
-  echo " 2. تغییرات را commit می‌کند"
-  echo " 3. Tag v$new_version را ایجاد می‌کند"
-  echo " 4. تغییرات و tag را به GitHub push می‌کند"
-  echo " 5. GitHub Actions workflow را trigger می‌کند"
+  echo -e "${YELLOW}This operation will:${NC}"
+  echo " 1. Update version in $TAURI_CONFIG_PATH to $new_version"
+  echo " 2. Commit the changes"
+  echo " 3. Create tag v$new_version"
+  echo " 4. Push changes and tag to GitHub"
+  echo " 5. Trigger GitHub Actions workflow"
   echo ""
 
-  read -p "آیا مطمئن هستید که می‌خواهید ادامه دهید؟ (yes/no): " confirm
+  read -p "Are you sure you want to continue? (yes/no): " confirm
 
   if [ "$confirm" != "yes" ]; then
-  print_warning "عملیات توسط کاربر لغو شد"
+  print_warning "Operation cancelled by user"
   exit 0
   fi
   }
@@ -255,55 +254,54 @@ IFS='.' read -r -a parts <<< "$version"
   # ==============================================================================
 
   pull_latest_changes() {
-  print_header "دریافت آخرین تغییرات"
+  print_header "Pulling Latest Changes"
 
-  print_info "در حال pull کردن از $MAIN_BRANCH ..."
+  print_info "Pulling from $MAIN_BRANCH ..."
   if git pull origin "$MAIN_BRANCH"; then
-  print_success "آخرین تغییرات دریافت شد"
+  print_success "Latest changes pulled successfully"
   else
-  print_error "خطا در دریافت تغییرات"
-  exit 1
+  print_error "Error pulling changes"
   fi
   }
 
   commit_and_push_changes() {
   local new_version=$1
 
-  print_header "Commit و Push تغییرات"
+  print_header "Commit and Push Changes"
 
   # Add changed files
   git add "$TAURI_CONFIG_PATH"
 
   # Commit
-  print_info "در حال commit کردن تغییرات ..."
+  print_info "Committing changes ..."
   git commit -m "chore: bump version to $new_version"
 
   # Push
-  print_info "در حال push کردن به $MAIN_BRANCH ..."
+  print_info "Pushing to $MAIN_BRANCH ..."
   git push origin "$MAIN_BRANCH"
 
-  print_success "تغییرات commit و push شدند"
+  print_success "Changes committed and pushed"
   }
 
   create_and_push_tag() {
   local new_version=$1
   local tag_name="v$new_version"
 
-  print_header "ساخت و Push کردن Tag"
+  print_header "Create and Push Tag"
 
   # Create tag
-  print_info "در حال ساخت tag $tag_name ..."
+  print_info "Creating tag $tag_name ..."
   git tag -a "$tag_name" -m "Release $tag_name"
 
   # Push tag
-  print_info "در حال push کردن tag به GitHub ..."
+  print_info "Pushing tag to GitHub ..."
   git push origin "$tag_name"
 
-  print_success "Tag $tag_name ساخته و push شد"
+  print_success "Tag $tag_name created and pushed"
   }
 
   # ==============================================================================
-  # Main Script
+  # Main
   # ==============================================================================
 
   main() {
@@ -320,20 +318,18 @@ IFS='.' read -r -a parts <<< "$version"
 
   # Step 4: Get current version
   CURRENT_VERSION=$(get_current_version)
-  print_info "نسخه فعلی در config: $CURRENT_VERSION"
+  print_info "Current version in config: $CURRENT_VERSION"
 
   # Step 5: Get latest tag
   LATEST_TAG=$(get_latest_tag)
-  print_info "آخرین tag production: $LATEST_TAG"
+  print_info "Latest production tag: $LATEST_TAG"
 
   # Step 6: Select increment type
   INCREMENT_TYPE=$(select_increment_type)
 
   # Step 7: Calculate new version
   NEW_VERSION=$(increment_version "$LATEST_TAG" "$INCREMENT_TYPE")
-  print_success "نسخه جدید محاسبه شد: v$NEW_VERSION"
-
-  # Step 8: Confirm release
+  print_success "New version calculated: v$NEW_VERSION"
   confirm_release "$LATEST_TAG" "$NEW_VERSION" "$INCREMENT_TYPE"
 
   # Step 9: Update tauri config
@@ -346,19 +342,19 @@ IFS='.' read -r -a parts <<< "$version"
   create_and_push_tag "$NEW_VERSION"
 
   # Success message
-  print_header "✅ Release موفقیت‌آمیز بود!"
+  print_header "✅ Release Successful!"
 
   echo ""
-  echo -e "${GREEN}🎉 نسخه v$NEW_VERSION با موفقیت release شد!${NC}"
+  echo -e "${GREEN}🎉 Version v$NEW_VERSION released successfully!${NC}"
   echo ""
-  echo -e "${BLUE}مراحل بعدی:${NC}"
-  echo " 1. GitHub Actions workflow به طور خودکار شروع خواهد شد"
-  echo " 2. برنامه برای تمام پلتفرم‌ها build خواهد شد"
-  echo " 3. Release در GitHub ایجاد خواهد شد (به صورت draft)"
-  echo " 4. به این آدرس بروید تا release را publish کنید:"
+  echo -e "${BLUE}Next Steps:${NC}"
+  echo " 1. GitHub Actions workflow will start automatically"
+  echo " 2. Application will be built for all platforms"
+  echo " 3. Release will be created in GitHub (as draft)"
+  echo " 4. Go to this URL to publish the release:"
   echo -e " ${BLUE}https://github.com/hamedhosseini143/tauri-auto-updater/releases${NC}"
   echo ""
-  print_info "منتظر بمانید تا GitHub Actions workflow تمام شود (~5-10 دقیقه)"
+  print_info "Wait for GitHub Actions workflow to complete (~5-10 minutes)"
   echo ""
   }
 
