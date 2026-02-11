@@ -163,9 +163,9 @@ IFS='.' read -r -a parts <<< "$version"
   esac
 
   echo "${major}.${minor}.${patch}"
-  }
+}
 
-  select_increment_type() {
+select_increment_type() {
   print_header "Select Version Increment Type"
 
   echo -e "${BLUE}Select the type of changes in this release:${NC}"
@@ -195,9 +195,9 @@ IFS='.' read -r -a parts <<< "$version"
   ;;
   esac
   done
-  }
+}
 
-  update_tauri_config() {
+update_tauri_config() {
   local new_version=$1
 
   print_info "Updating $TAURI_CONFIG_PATH ..."
@@ -212,13 +212,13 @@ IFS='.' read -r -a parts <<< "$version"
   mv "$temp_file" "$TAURI_CONFIG_PATH"
 
   print_success "Version in $TAURI_CONFIG_PATH updated to $new_version"
-  }
+}
 
   # ==============================================================================
   # Confirmation
   # ==============================================================================
 
-  confirm_release() {
+confirm_release() {
   local old_version=$1
   local new_version=$2
   local increment_type=$3
@@ -248,13 +248,13 @@ IFS='.' read -r -a parts <<< "$version"
   print_warning "Operation cancelled by user"
   exit 0
   fi
-  }
+}
 
   # ==============================================================================
   # Git Operations
   # ==============================================================================
 
-  pull_latest_changes() {
+pull_latest_changes() {
   print_header "Pulling Latest Changes"
 
   print_info "Pulling from $MAIN_BRANCH ..."
@@ -264,9 +264,9 @@ IFS='.' read -r -a parts <<< "$version"
   print_error "Error pulling changes"
   exit 1
   fi
-  }
+}
 
-  commit_and_push_changes() {
+commit_and_push_changes() {
   local new_version=$1
 
   print_header "Commit and Push Changes"
@@ -283,9 +283,9 @@ IFS='.' read -r -a parts <<< "$version"
   git push origin "$MAIN_BRANCH"
 
   print_success "Changes committed and pushed"
-  }
+}
 
-  create_and_push_tag() {
+create_and_push_tag() {
   local new_version=$1
   local tag_name="v$new_version"
 
@@ -300,13 +300,13 @@ IFS='.' read -r -a parts <<< "$version"
   git push origin "$tag_name"
 
   print_success "Tag $tag_name created and pushed"
-  }
+}
 
   # ==============================================================================
   # Main
   # ==============================================================================
 
-  main() {
+main() {
   print_header "🚀 Tauri Auto-Updater Production Release"
 
   # Step 1: Check prerequisites
@@ -360,7 +360,7 @@ IFS='.' read -r -a parts <<< "$version"
   echo ""
   print_info "Wait for GitHub Actions workflow to complete (~5-10 minutes)"
   echo ""
-  }
+}
 
   # Run main function
   main
