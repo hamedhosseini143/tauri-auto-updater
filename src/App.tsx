@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import { relaunch } from '@tauri-apps/api/process';
+import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';
 import { useEffect, useState } from 'react';
 import './App.css';
