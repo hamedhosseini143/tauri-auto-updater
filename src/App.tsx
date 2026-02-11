@@ -24,6 +24,9 @@ function App() {
     try {
       const update = await check();
 
+      // Track expected total size for percentage calculation once available.
+      let totalSize = 0;
+
       if (update) {
         setUpdateStatus(
           `Update available: ${update.version}. Current version: ${update.currentVersion}`
@@ -33,11 +36,12 @@ function App() {
         setUpdateStatus('Downloading update...');
         await update.downloadAndInstall((progress) => {
           if (progress.event === 'Started') {
+            totalSize = progress.data.contentLength ?? 0;
             setUpdateStatus(`Downloading update: ${progress.data.contentLength} bytes`);
           } else if (progress.event === 'Progress') {
-            const percentage = Math.round(
-              (progress.data.chunkLength / (progress.data.contentLength || 1)) * 100
-            );
+            const percentage = totalSize
+              ? Math.round((progress.data.chunkLength / totalSize) * 100)
+              : Math.round(progress.data.chunkLength);
             setDownloadProgress(percentage);
             setUpdateStatus(`Downloading: ${percentage}%`);
           } else if (progress.event === 'Finished') {
