@@ -1,16 +1,69 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { invoke } from '@tauri-apps/api/core';
+import { relaunch } from '@tauri-apps/api/process';
+import { check } from '@tauri-apps/plugin-updater';
+import { useEffect, useState } from 'react';
+import './App.css';
+import reactLogo from './assets/react.svg';
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [greetMsg, setGreetMsg] = useState('');
+  const [name, setName] = useState('');
+  const [updateStatus, setUpdateStatus] = useState<string>('');
+  const [isChecking, setIsChecking] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState<number>(0);
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
+    setGreetMsg(await invoke('greet', { name }));
   }
+
+  async function checkForUpdates() {
+    setIsChecking(true);
+    setUpdateStatus('Checking for updates...');
+
+    try {
+      const update = await check();
+
+      if (update) {
+        setUpdateStatus(
+          `Update available: ${update.version}. Current version: ${update.currentVersion}`
+        );
+
+        // Download and install the update
+        setUpdateStatus('Downloading update...');
+        await update.downloadAndInstall((progress) => {
+          if (progress.event === 'Started') {
+            setUpdateStatus(`Downloading update: ${progress.data.contentLength} bytes`);
+          } else if (progress.event === 'Progress') {
+            const percentage = Math.round(
+              (progress.data.chunkLength / (progress.data.contentLength || 1)) * 100
+            );
+            setDownloadProgress(percentage);
+            setUpdateStatus(`Downloading: ${percentage}%`);
+          } else if (progress.event === 'Finished') {
+            setUpdateStatus('Download complete! Installing...');
+          }
+        });
+
+        setUpdateStatus('Update installed! Restarting application...');
+
+        // Relaunch the application after update
+        await relaunch();
+      } else {
+        setUpdateStatus('You are running the latest version!');
+      }
+    } catch (error) {
+      setUpdateStatus(`Error checking for updates: ${error}`);
+      console.error('Update error:', error);
+    } finally {
+      setIsChecking(false);
+    }
+  }
+
+  // Check for updates on mount
+  useEffect(() => {
+    checkForUpdates();
+  }, []);
 
   return (
     <main className="container">
@@ -28,6 +81,24 @@ function App() {
         </a>
       </div>
       <p>Click on the Tauri, Vite, and React logos to learn more.</p>
+
+      <div
+        style={{
+          margin: '20px 0',
+          padding: '10px',
+          backgroundColor: '#f0f0f0',
+          borderRadius: '5px',
+        }}
+      >
+        <h3>Auto Updater</h3>
+        <p>{updateStatus}</p>
+        {downloadProgress > 0 && (
+          <progress value={downloadProgress} max="100" style={{ width: '100%' }} />
+        )}
+        <button onClick={checkForUpdates} disabled={isChecking} style={{ marginTop: '10px' }}>
+          {isChecking ? 'Checking...' : 'Check for Updates'}
+        </button>
+      </div>
 
       <form
         className="row"
